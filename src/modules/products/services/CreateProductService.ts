@@ -2,7 +2,7 @@ import { IProduct } from 'src/types';
 import Product from '../entities/Product';
 import { getCustomRepository } from 'typeorm';
 import { ProductRepository } from '../repositories/ProductsRepository';
-import AppError from '@shared/errors/appError';
+import ValidationError from '@shared/errors/ValidationError';
 
 class CreateProductService {
   public async execute({ name, price, quantity }: IProduct): Promise<Product> {
@@ -10,7 +10,7 @@ class CreateProductService {
     const productExists = await productsRepository.findByName(name);
 
     if (productExists) {
-      throw new AppError('Produto já existente com este nome.');
+      throw new ValidationError('Produto já existente com este nome.');
     }
 
     const product = productsRepository.create({
